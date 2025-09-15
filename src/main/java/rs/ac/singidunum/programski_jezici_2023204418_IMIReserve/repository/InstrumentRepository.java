@@ -13,4 +13,6 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Integer>
     List<Instrument> findAllByDeletedAtIsNull();
 
     Optional<Instrument> findByIdAndDeletedAtIsNull(Integer id);
+
+    Boolean existsByIdAndDeletedAtIsNull(Integer id);
 }

@@ -34,12 +34,15 @@ public class Reservation {
     @Column(name = "parameter")
     private String parameter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    private String uuid;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_researcher", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Researcher researcher;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_instrument", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Instrument instrument;
