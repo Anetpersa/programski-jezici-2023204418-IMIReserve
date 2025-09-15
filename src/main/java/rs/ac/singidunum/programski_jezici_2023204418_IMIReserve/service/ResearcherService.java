@@ -15,7 +15,7 @@ public class ResearcherService {
 
     private final ResearcherRepository repository;
 
-    public List<Researcher> getResearcher() {
+    public List<Researcher> getResearchers() {
         return repository.findAllByDeletedAtIsNull();
     }
 

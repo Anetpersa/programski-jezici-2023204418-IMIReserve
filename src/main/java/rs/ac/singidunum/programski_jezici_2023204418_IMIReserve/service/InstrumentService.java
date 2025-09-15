@@ -14,7 +14,7 @@ import java.util.Optional;
 public class InstrumentService {
     private final InstrumentRepository repository;
 
-    public List<Instrument> getInstrument() {
+    public List<Instrument> getInstruments() {
         return repository.findAllByDeletedAtIsNull();
     }
 
