@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "instrument")
@@ -25,6 +27,9 @@ public class Instrument {
 
     @Column(name = "laboratory", nullable = false)
     private String laboratory;
+
+    @OneToMany(mappedBy = "instrument", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
