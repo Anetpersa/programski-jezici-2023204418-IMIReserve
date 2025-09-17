@@ -12,10 +12,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findAllByDeletedAtIsNull();
 
     Optional<Reservation> findByIdAndDeletedAtIsNull(Integer id);
-
-    List<Reservation> findAllByResearcher_IdAndDeletedAtIsNull(Integer researcherId);
-
-    List<Reservation> findAllByInstrument_IdAndDeletedAtIsNull(Integer instrumentId);
-
-    Boolean existsByIdAndDeletedAtIsNull(Integer id);
 }

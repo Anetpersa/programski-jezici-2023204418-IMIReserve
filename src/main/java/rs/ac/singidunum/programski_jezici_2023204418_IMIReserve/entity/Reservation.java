@@ -30,7 +30,6 @@ public class Reservation {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime endTime;
 
-    // dodatni parametar eksperimenta (npr. temperatura, broj ciklusa itd.)
     @Column(name = "parameter")
     private String parameter;
 

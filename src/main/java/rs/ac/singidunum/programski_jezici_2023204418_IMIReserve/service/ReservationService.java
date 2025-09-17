@@ -28,7 +28,6 @@ public class ReservationService {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    // GET sve rezervacije
     public List<ReservationResponseDTO> getReservations() {
         return reservationRepository.findAllByDeletedAtIsNull()
                 .stream()
@@ -36,13 +35,11 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
-    // GET po ID
     public Optional<ReservationResponseDTO> getReservationById(Integer id) {
         return reservationRepository.findByIdAndDeletedAtIsNull(id)
                 .map(this::toDTO);
     }
 
-    // CREATE
     public ReservationResponseDTO createReservation(ReservationDTO dto) {
         Researcher researcher = researcherRepository.findByIdAndDeletedAtIsNull(dto.getResearcherId())
                 .orElseThrow(() -> new RuntimeException("RESEARCHER_NOT_FOUND"));
@@ -62,7 +59,6 @@ public class ReservationService {
         return toDTO(reservationRepository.save(reservation));
     }
 
-    // UPDATE
     public ReservationResponseDTO updateReservation(Integer id, ReservationDTO dto) {
         Reservation reservation = reservationRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new RuntimeException("RESERVATION_NOT_FOUND"));
@@ -83,7 +79,6 @@ public class ReservationService {
         return toDTO(reservationRepository.save(reservation));
     }
 
-    // DELETE
     public void deleteReservation(Integer id) {
         Reservation reservation = reservationRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new RuntimeException("RESERVATION_NOT_FOUND"));
@@ -91,7 +86,6 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    // Konverzija entity -> DTO
     public ReservationResponseDTO toDTO(Reservation r) {
         ReservationResponseDTO dto = new ReservationResponseDTO();
         dto.setId(r.getId());

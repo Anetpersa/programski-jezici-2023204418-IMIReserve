@@ -13,6 +13,4 @@ public interface ResearcherRepository extends JpaRepository<Researcher, Integer>
     List<Researcher> findAllByDeletedAtIsNull();
 
     Optional<Researcher> findByIdAndDeletedAtIsNull(Integer id);
-
-    Boolean existsByIdAndDeletedAtIsNull(Integer id);
 }

@@ -40,5 +40,4 @@ public class Instrument {
     @JsonIgnore
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
 }
