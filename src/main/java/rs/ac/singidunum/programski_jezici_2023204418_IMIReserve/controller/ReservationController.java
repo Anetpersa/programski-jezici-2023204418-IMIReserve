@@ -3,8 +3,8 @@ package rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.ReservationDTO;
-import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.ReservationResponseDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.request.ReservationDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.response.ReservationResponseDTO;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.service.ReservationService;
 
 import java.util.List;

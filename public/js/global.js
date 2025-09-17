@@ -1,19 +1,18 @@
 // global.js
-
 /**
- * Formatira ISO datum u srpski lokalni format
+ * Formatira ISO datum u uniforman format YYYY-MM-DD HH:mm
  * @param {string} iso - ISO string datuma
  * @returns {string} - formatiran datum ili 'N/A'
  */
 function formatDate(iso) {
     if (!iso) return 'N/A';
-    return new Date(iso).toLocaleString('sr-RS', {
-        year: '2-digit',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+    const date = new Date(iso);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2,'0');
+    const day = String(date.getDate()).padStart(2,'0');
+    const hours = String(date.getHours()).padStart(2,'0');
+    const minutes = String(date.getMinutes()).padStart(2,'0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
 /**

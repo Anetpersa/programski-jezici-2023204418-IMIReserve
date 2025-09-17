@@ -3,10 +3,12 @@ package rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.ResearcherDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.request.ResearcherDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.response.ResearcherResponseDTO;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Researcher;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.service.ResearcherService;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,31 +19,32 @@ import java.util.stream.Collectors;
 public class ResearcherController {
 
     private final ResearcherService service;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @GetMapping
-    public List<ResearcherDTO> getResearchers() {
+    public List<ResearcherResponseDTO> getResearchers() {
         return service.getResearchers().stream()
-                .map(this::convertToDTO)
+                .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResearcherDTO getResearcherById(@PathVariable Integer id) {
+    public ResearcherResponseDTO getResearcherById(@PathVariable Integer id) {
         return service.getResearcherById(id)
-                .map(this::convertToDTO)
+                .map(this::convertToResponseDTO)
                 .orElseThrow(() -> new RuntimeException("RESEARCHER_NOT_FOUND"));
     }
 
     @PostMapping
-    public ResearcherDTO saveResearcher(@RequestBody ResearcherDTO dto) {
+    public ResearcherResponseDTO saveResearcher(@RequestBody ResearcherDTO dto) {
         Researcher researcher = service.createResearcher(dto);
-        return convertToDTO(researcher);
+        return convertToResponseDTO(researcher);
     }
 
     @PutMapping("/{id}")
-    public ResearcherDTO updateResearcher(@PathVariable Integer id, @RequestBody ResearcherDTO dto) {
+    public ResearcherResponseDTO updateResearcher(@PathVariable Integer id, @RequestBody ResearcherDTO dto) {
         Researcher researcher = service.updateResearcher(id, dto);
-        return convertToDTO(researcher);
+        return convertToResponseDTO(researcher);
     }
 
     @DeleteMapping("/{id}")
@@ -50,12 +53,15 @@ public class ResearcherController {
         service.deleteResearcher(id);
     }
 
-    private ResearcherDTO convertToDTO(Researcher r) {
-        ResearcherDTO dto = new ResearcherDTO();
+    private ResearcherResponseDTO convertToResponseDTO(Researcher r) {
+        ResearcherResponseDTO dto = new ResearcherResponseDTO();
+        dto.setId(r.getId());
         dto.setFirstName(r.getFirstName());
         dto.setLastName(r.getLastName());
         dto.setPhone(r.getPhone());
         dto.setEmail(r.getEmail());
+        dto.setCreatedAt(r.getCreatedAt() != null ? r.getCreatedAt().format(formatter) : null);
+        dto.setUpdatedAt(r.getUpdatedAt() != null ? r.getUpdatedAt().format(formatter) : null);
         return dto;
     }
 }

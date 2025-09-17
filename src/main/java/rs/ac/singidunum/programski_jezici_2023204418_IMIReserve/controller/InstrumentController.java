@@ -3,10 +3,12 @@ package rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.InstrumentDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.request.InstrumentDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.response.InstrumentResponseDTO;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Instrument;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.service.InstrumentService;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,31 +19,32 @@ import java.util.stream.Collectors;
 public class InstrumentController {
 
     private final InstrumentService service;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @GetMapping
-    public List<InstrumentDTO> getInstruments() {
+    public List<InstrumentResponseDTO> getInstruments() {
         return service.getInstruments().stream()
-                .map(this::convertToDTO)
+                .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public InstrumentDTO getInstrumentById(@PathVariable Integer id) {
+    public InstrumentResponseDTO getInstrumentById(@PathVariable Integer id) {
         return service.getInstrumentById(id)
-                .map(this::convertToDTO)
+                .map(this::convertToResponseDTO)
                 .orElseThrow(() -> new RuntimeException("INSTRUMENT_NOT_FOUND"));
     }
 
     @PostMapping
-    public InstrumentDTO saveInstrument(@RequestBody InstrumentDTO dto) {
+    public InstrumentResponseDTO saveInstrument(@RequestBody InstrumentDTO dto) {
         Instrument instrument = service.createInstrument(dto);
-        return convertToDTO(instrument);
+        return convertToResponseDTO(instrument);
     }
 
     @PutMapping("/{id}")
-    public InstrumentDTO updateInstrument(@PathVariable Integer id, @RequestBody InstrumentDTO dto) {
+    public InstrumentResponseDTO updateInstrument(@PathVariable Integer id, @RequestBody InstrumentDTO dto) {
         Instrument instrument = service.updateInstrument(id, dto);
-        return convertToDTO(instrument);
+        return convertToResponseDTO(instrument);
     }
 
     @DeleteMapping("/{id}")
@@ -50,10 +53,13 @@ public class InstrumentController {
         service.deleteInstrument(id);
     }
 
-    private InstrumentDTO convertToDTO(Instrument i) {
-        InstrumentDTO dto = new InstrumentDTO();
+    private InstrumentResponseDTO convertToResponseDTO(Instrument i) {
+        InstrumentResponseDTO dto = new InstrumentResponseDTO();
+        dto.setId(i.getId());
         dto.setInstrumentName(i.getInstrumentName());
         dto.setLaboratory(i.getLaboratory());
+        dto.setCreatedAt(i.getCreatedAt() != null ? i.getCreatedAt().format(formatter) : null);
+        dto.setUpdatedAt(i.getUpdatedAt() != null ? i.getUpdatedAt().format(formatter) : null);
         return dto;
     }
 }

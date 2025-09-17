@@ -9,6 +9,7 @@ if (!researcherForm || !researcherTableBody) {
 } else {
     let editingId = null;
 
+    // Učitaj istraživače i prikaži u tabeli
     function loadResearchers() {
         axios.get('/api/researcher')
             .then(rsp => {
@@ -16,17 +17,17 @@ if (!researcherForm || !researcherTableBody) {
                 rsp.data.forEach(r => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-    <td>${r.id}</td>
-    <td>${r.firstName}</td>
-    <td>${r.lastName}</td>
-    <td>${r.email}</td>
-    <td>${r.phone}</td>
-    <td>${formatDate(r.createdAt)}</td>
-    <td>${formatDate(r.updatedAt)}</td>
-    <td class="d-flex justify-content-center gap-2">
-        <button class="btn btn-sm btn-warning edit-btn">Izmeni</button>
-        <button class="btn btn-sm btn-danger delete-btn">Obriši</button>
-    </td>
+                        <td>${r.id}</td>
+                        <td>${r.firstName}</td>
+                        <td>${r.lastName}</td>
+                        <td>${r.email}</td>
+                        <td>${r.phone}</td>
+                        <td>${formatDate(r.createdAt)}</td>
+                        <td>${formatDate(r.updatedAt)}</td>
+                        <td class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-sm btn-warning edit-btn">Izmeni</button>
+                            <button class="btn btn-sm btn-danger delete-btn">Obriši</button>
+                        </td>
                     `;
 
                     // Edit dugme
@@ -49,7 +50,7 @@ if (!researcherForm || !researcherTableBody) {
                             if (confirm('Da li ste sigurni da želite da obrišete ovog istraživača?')) {
                                 axios.delete('/api/researcher/' + r.id)
                                     .then(() => loadResearchers())
-                                    .catch(err => showError(err.response?.data?.message));
+                                    .catch(err => showError(err?.response?.data?.message || err.message));
                             }
                         });
                     }
@@ -57,9 +58,10 @@ if (!researcherForm || !researcherTableBody) {
                     researcherTableBody.appendChild(tr);
                 });
             })
-            .catch(err => showError(err.response?.data?.message));
+            .catch(err => showError(err?.response?.data?.message || err.message));
     }
 
+    // Submit forma (dodaj / izmeni istraživača)
     researcherForm.addEventListener('submit', e => {
         e.preventDefault();
 
@@ -77,17 +79,18 @@ if (!researcherForm || !researcherTableBody) {
                     researcherForm.reset();
                     loadResearchers();
                 })
-                .catch(err => showError(err.response?.data?.message));
+                .catch(err => showError(err?.response?.data?.message || err.message));
         } else {
             axios.post('/api/researcher', data)
                 .then(() => {
                     researcherForm.reset();
                     loadResearchers();
                 })
-                .catch(err => showError(err.response?.data?.message));
+                .catch(err => showError(err?.response?.data?.message || err.message));
         }
     });
 
+    // Cancel dugme
     if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
             editingId = null;
@@ -95,5 +98,6 @@ if (!researcherForm || !researcherTableBody) {
         });
     }
 
+    // INIT
     loadResearchers();
 }

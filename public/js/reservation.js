@@ -50,10 +50,10 @@ function loadReservations() {
                     <td>${r.researcherName}</td>
                     <td>${r.instrumentName}</td>
                     <td>${r.parameter}</td>
-                    <td>${r.startTime}</td>
-                    <td>${r.endTime}</td>
-                    <td>${r.createdAt ? r.createdAt : ''}</td>
-                    <td>${r.updatedAt ? r.updatedAt : ''}</td>
+                    <td>${formatDate(r.startTime)}</td>
+                    <td>${formatDate(r.endTime)}</td>
+                    <td>${r.createdAt ? formatDate(r.createdAt) : ''}</td>
+                    <td>${r.updatedAt ? formatDate(r.updatedAt) : ''}</td>
                     <td class="d-flex justify-content-center gap-2">
                         <button class="btn btn-sm btn-warning edit-btn">Izmeni</button>
                         <button class="btn btn-sm btn-danger delete-btn">Obriši</button>
@@ -67,8 +67,10 @@ function loadReservations() {
                     researcherSelect.value = r.researcherId;
                     instrumentSelect.value = r.instrumentId;
                     document.getElementById('parameter').value = r.parameter;
-                    document.getElementById('startTime').value = r.startTime;
-                    document.getElementById('endTime').value = r.endTime;
+
+                    // Za input tip datetime-local moramo konvertovati u format YYYY-MM-DDTHH:mm
+                    document.getElementById('startTime').value = r.startTime ? r.startTime.substring(0,16) : '';
+                    document.getElementById('endTime').value = r.endTime ? r.endTime.substring(0,16) : '';
                 });
 
                 // Delete dugme

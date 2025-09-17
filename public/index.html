@@ -12,17 +12,21 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .main-container {
-            max-width: 900px;
-            /* ista širina kao kartice */
+            max-width: 1200px;
             margin: 0 auto;
-            /* centrirano */
         }
 
         #content {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            justify-content: center;
+            justify-content: space-between; /* kartice popunjavaju prostor */
+        }
+
+        .card {
+            flex: 1 1 32%; /* tri kartice po redu */
+            max-width: 32%;
+            box-sizing: border-box;
         }
 
         .card-body {
@@ -98,7 +102,7 @@
 
         <!-- TEMPLATE KARTICA -->
         <template id="template">
-            <div class="card" style="width: 18rem;">
+            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title title"></h5>
                     <p class="card-text desc"></p>

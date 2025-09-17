@@ -2,8 +2,8 @@ package rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.ReservationDTO;
-import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.ReservationResponseDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.request.ReservationDTO;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.response.ReservationResponseDTO;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Instrument;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Researcher;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Reservation;

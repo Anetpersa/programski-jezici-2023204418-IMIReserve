@@ -9,6 +9,7 @@ if (!instrumentForm || !instrumentTableBody) {
 } else {
     let editingId = null;
 
+    // Učitaj instrumente i prikaži u tabeli
     function loadInstruments() {
         axios.get('/api/instrument')
             .then(rsp => {
@@ -16,15 +17,15 @@ if (!instrumentForm || !instrumentTableBody) {
                 rsp.data.forEach(i => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-    <td>${i.id}</td>
-    <td>${i.instrumentName}</td>
-    <td>${i.laboratory}</td>
-    <td>${formatDate(i.createdAt)}</td>
-    <td>${formatDate(i.updatedAt)}</td>
-    <td class="d-flex justify-content-center gap-2">
-        <button class="btn btn-sm btn-warning edit-btn">Izmeni</button>
-        <button class="btn btn-sm btn-danger delete-btn">Obriši</button>
-    </td>
+                        <td>${i.id}</td>
+                        <td>${i.instrumentName}</td>
+                        <td>${i.laboratory}</td>
+                        <td>${formatDate(i.createdAt)}</td>
+                        <td>${formatDate(i.updatedAt)}</td>
+                        <td class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-sm btn-warning edit-btn">Izmeni</button>
+                            <button class="btn btn-sm btn-danger delete-btn">Obriši</button>
+                        </td>
                     `;
 
                     // Edit dugme
@@ -56,6 +57,7 @@ if (!instrumentForm || !instrumentTableBody) {
             .catch(err => showError(err?.response?.data?.message || err.message));
     }
 
+    // Submit forma (dodaj / izmeni instrument)
     instrumentForm.addEventListener('submit', e => {
         e.preventDefault();
 
@@ -82,6 +84,7 @@ if (!instrumentForm || !instrumentTableBody) {
         }
     });
 
+    // Cancel dugme
     if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
             editingId = null;
@@ -89,5 +92,6 @@ if (!instrumentForm || !instrumentTableBody) {
         });
     }
 
+    // INIT
     loadInstruments();
 }
