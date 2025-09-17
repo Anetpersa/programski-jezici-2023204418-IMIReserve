@@ -10,50 +10,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        #content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: space-between; /* kartice popunjavaju prostor */
-        }
-
-        .card {
-            flex: 1 1 32%; /* tri kartice po redu */
-            max-width: 32%;
-            box-sizing: border-box;
-        }
-
-        .card-body {
-            min-height: 150px;
-        }
-
-        .card-footer a {
-            text-decoration: none;
-        }
-
-        /* Crveni dugmići za "Otvori" */
-        .btn-open {
-            background-color: #941616;
-            border-color: #941616;
-            color: #fff;
-        }
-
-        .btn-open:hover {
-            background-color: #7a1212;
-            border-color: #7a1212;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
 <body data-bs-theme="dark">
     <div class="main-container">
+        <header>
+            <div>
+                <h2>Institut za medicinska istraživanja</h2>
+                <p>Univerzitet u Beogradu</p>
+            </div>
+            <img src="images/imilogo_resized.jpg" alt="logo" id="logo">
+        </header>
+
         <!-- NAVIGACIJA -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
             <div class="container-lg">
@@ -93,7 +62,8 @@
         </nav>
 
         <!-- Slika ispod navigacije -->
-        <div class="container mb-4 text-center">
+        <!-- Slika ispod navigacije -->
+        <div class="text-center mb-2">
             <img src="images/bloodstream.jpg" alt="bloodstream" class="img-fluid rounded">
         </div>
 
@@ -114,6 +84,11 @@
                 </div>
             </div>
         </template>
+
+        <footer>
+            <p>Institut za medicinska istraživanja Univerzitet u Beograd</p>
+        </footer>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
