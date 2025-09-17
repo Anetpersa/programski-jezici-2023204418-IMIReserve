@@ -2,15 +2,16 @@ package rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.dto.InstrumentDTO;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Instrument;
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.service.InstrumentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/api/instrument")
+@RequestMapping("/api/instrument")
 @CrossOrigin
 @RequiredArgsConstructor
 public class InstrumentController {
@@ -18,30 +19,41 @@ public class InstrumentController {
     private final InstrumentService service;
 
     @GetMapping
-    public List<Instrument> getInstruments() {
-        return service.getInstruments();
+    public List<InstrumentDTO> getInstruments() {
+        return service.getInstruments().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<Instrument> getInstrumentById(@PathVariable Integer id) {
-        return ResponseEntity.of(service.getInstrumentById(id));
+    @GetMapping("/{id}")
+    public InstrumentDTO getInstrumentById(@PathVariable Integer id) {
+        return service.getInstrumentById(id)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new RuntimeException("INSTRUMENT_NOT_FOUND"));
     }
 
     @PostMapping
-    public Instrument saveInstrument(@RequestBody Instrument model) {
-
-        return service.createInstrument(model);
+    public InstrumentDTO saveInstrument(@RequestBody InstrumentDTO dto) {
+        Instrument instrument = service.createInstrument(dto);
+        return convertToDTO(instrument);
     }
 
-    @PutMapping(path = "/{id}")
-    public Instrument updateInstrument(@PathVariable Integer id, @RequestBody Instrument model) {
-
-        return service.updateInstrument(id, model);
+    @PutMapping("/{id}")
+    public InstrumentDTO updateInstrument(@PathVariable Integer id, @RequestBody InstrumentDTO dto) {
+        Instrument instrument = service.updateInstrument(id, dto);
+        return convertToDTO(instrument);
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteInstrument(@PathVariable Integer id) {
         service.deleteInstrument(id);
+    }
+
+    private InstrumentDTO convertToDTO(Instrument i) {
+        InstrumentDTO dto = new InstrumentDTO();
+        dto.setInstrumentName(i.getInstrumentName());
+        dto.setLaboratory(i.getLaboratory());
+        return dto;
     }
 }

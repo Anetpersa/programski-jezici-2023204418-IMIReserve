@@ -88,18 +88,32 @@
                 <h5 class="card-title">Dodaj / Izmeni rezervaciju</h5>
                 <form id="reservation-form">
                     <input type="hidden" id="reservation-id">
+
                     <div class="mb-3">
-                        <label for="researcher" class="form-label">Istraživač</label>
-                        <input type="text" class="form-control" id="researcher" required>
+                        <label for="researcherId" class="form-label">Istraživač</label>
+                        <select id="researcherId" class="form-select" required></select>
                     </div>
+
                     <div class="mb-3">
-                        <label for="instrument" class="form-label">Instrument</label>
-                        <input type="text" class="form-control" id="instrument" required>
+                        <label for="instrumentId" class="form-label">Instrument</label>
+                        <select id="instrumentId" class="form-select" required></select>
                     </div>
+
                     <div class="mb-3">
-                        <label for="date" class="form-label">Datum</label>
-                        <input type="date" class="form-control" id="date" required>
+                        <label for="parameter" class="form-label">Parametar</label>
+                        <input type="text" class="form-control" id="parameter" required>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="startTime" class="form-label">Vreme početka</label>
+                        <input type="datetime-local" class="form-control" id="startTime" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="endTime" class="form-label">Vreme završetka</label>
+                        <input type="datetime-local" class="form-control" id="endTime" required>
+                    </div>
+
                     <button type="submit" class="btn btn-save">Sačuvaj</button>
                     <button type="button" class="btn btn-secondary" id="cancel-btn">Otkaži</button>
                 </form>
@@ -114,7 +128,9 @@
                     <th>ID</th>
                     <th>Istraživač</th>
                     <th>Instrument</th>
-                    <th>Datum</th>
+                    <th>Parametar</th>
+                    <th>Vreme početka</th>
+                    <th>Vreme završetka</th>
                     <th>Datum kreiranja</th>
                     <th>Datum izmene</th>
                     <th>Akcije</th>

@@ -1,6 +1,5 @@
 // instrument.js
 
-// Dobavljanje elemenata iz DOM-a
 const instrumentForm = document.getElementById('instrument-form');
 const instrumentTableBody = document.querySelector('#instrument-table tbody');
 const cancelBtn = document.getElementById('cancel-btn');
@@ -28,6 +27,7 @@ if (!instrumentForm || !instrumentTableBody) {
     </td>
                     `;
 
+                    // Edit dugme
                     const editBtn = tr.querySelector('.edit-btn');
                     if (editBtn) {
                         editBtn.addEventListener('click', () => {
@@ -38,13 +38,14 @@ if (!instrumentForm || !instrumentTableBody) {
                         });
                     }
 
+                    // Delete dugme
                     const deleteBtn = tr.querySelector('.delete-btn');
                     if (deleteBtn) {
                         deleteBtn.addEventListener('click', () => {
                             if (confirm('Da li ste sigurni da želite da obrišete ovaj instrument?')) {
                                 axios.delete('/api/instrument/' + i.id)
                                     .then(() => loadInstruments())
-                                    .catch(err => showError(err.response?.data?.message));
+                                    .catch(err => showError(err?.response?.data?.message || err.message));
                             }
                         });
                     }
@@ -52,7 +53,7 @@ if (!instrumentForm || !instrumentTableBody) {
                     instrumentTableBody.appendChild(tr);
                 });
             })
-            .catch(err => showError(err.response?.data?.message));
+            .catch(err => showError(err?.response?.data?.message || err.message));
     }
 
     instrumentForm.addEventListener('submit', e => {
@@ -70,14 +71,14 @@ if (!instrumentForm || !instrumentTableBody) {
                     instrumentForm.reset();
                     loadInstruments();
                 })
-                .catch(err => showError(err.response?.data?.message));
+                .catch(err => showError(err?.response?.data?.message || err.message));
         } else {
             axios.post('/api/instrument', data)
                 .then(() => {
                     instrumentForm.reset();
                     loadInstruments();
                 })
-                .catch(err => showError(err.response?.data?.message));
+                .catch(err => showError(err?.response?.data?.message || err.message));
         }
     });
 
