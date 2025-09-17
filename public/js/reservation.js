@@ -3,12 +3,15 @@ const reservationTableBody = document.querySelector('#reservation-table tbody');
 const cancelBtn = document.getElementById('cancel-btn');
 const researcherSelect = document.getElementById('researcherId');
 const instrumentSelect = document.getElementById('instrumentId');
+const startTimeInput = document.getElementById('startTime');
+const endTimeInput = document.getElementById('endTime');
 
 let researchers = [];
 let instruments = [];
 let editingId = null;
 
-// Učitaj istraživače
+// --- UČITAJ PODATKE ---
+
 function loadResearchers() {
     axios.get('/api/researcher')
         .then(rsp => {
@@ -23,7 +26,6 @@ function loadResearchers() {
         });
 }
 
-// Učitaj instrumente
 function loadInstruments() {
     axios.get('/api/instrument')
         .then(rsp => {
@@ -38,7 +40,6 @@ function loadInstruments() {
         });
 }
 
-// Učitaj rezervacije
 function loadReservations() {
     axios.get('/api/reservation')
         .then(rsp => {
@@ -67,10 +68,9 @@ function loadReservations() {
                     researcherSelect.value = r.researcherId;
                     instrumentSelect.value = r.instrumentId;
                     document.getElementById('parameter').value = r.parameter;
-
-                    // Za input tip datetime-local moramo konvertovati u format YYYY-MM-DDTHH:mm
-                    document.getElementById('startTime').value = r.startTime ? r.startTime.substring(0,16) : '';
-                    document.getElementById('endTime').value = r.endTime ? r.endTime.substring(0,16) : '';
+                    startTimeInput.value = r.startTime ? r.startTime.substring(0,16) : '';
+                    endTimeInput.value = r.endTime ? r.endTime.substring(0,16) : '';
+                    if (startTimeInput.value) endTimeInput.min = startTimeInput.value;
                 });
 
                 // Delete dugme
@@ -86,16 +86,46 @@ function loadReservations() {
         });
 }
 
-// Submit (dodaj / izmeni)
+// --- VALIDACIJA DATUMA ---
+
+// Kada se startTime menja, update endTime.min
+startTimeInput.addEventListener('change', () => {
+    if (startTimeInput.value) {
+        endTimeInput.min = startTimeInput.value;
+        if (endTimeInput.value && endTimeInput.value < startTimeInput.value) {
+            endTimeInput.value = startTimeInput.value;
+        }
+    } else {
+        endTimeInput.min = '';
+    }
+});
+
+// Kada se endTime menja, proveri da li je ispravno
+endTimeInput.addEventListener('change', () => {
+    if (startTimeInput.value && endTimeInput.value < startTimeInput.value) {
+        alert('Vreme završetka ne može biti pre vremena početka!');
+        endTimeInput.value = startTimeInput.value;
+    }
+});
+
+// --- SUBMIT FORME ---
+
 reservationForm.addEventListener('submit', e => {
     e.preventDefault();
+
+    if (!startTimeInput.value || !endTimeInput.value) return;
+
+    if (endTimeInput.value < startTimeInput.value) {
+        alert('Vreme završetka ne može biti pre vremena početka!');
+        return;
+    }
 
     const data = {
         researcherId: parseInt(researcherSelect.value),
         instrumentId: parseInt(instrumentSelect.value),
         parameter: document.getElementById('parameter').value,
-        startTime: document.getElementById('startTime').value,
-        endTime: document.getElementById('endTime').value
+        startTime: startTimeInput.value,
+        endTime: endTimeInput.value
     };
 
     if (editingId) {
@@ -103,24 +133,29 @@ reservationForm.addEventListener('submit', e => {
             .then(() => {
                 editingId = null;
                 reservationForm.reset();
+                endTimeInput.min = '';
                 loadReservations();
             });
     } else {
         axios.post('/api/reservation', data)
             .then(() => {
                 reservationForm.reset();
+                endTimeInput.min = '';
                 loadReservations();
             });
     }
 });
 
-// Cancel dugme
+// --- CANCEL ---
+
 cancelBtn.addEventListener('click', () => {
     editingId = null;
     reservationForm.reset();
+    endTimeInput.min = '';
 });
 
-// INIT
+// --- INIT ---
+
 loadResearchers();
 loadInstruments();
 loadReservations();
