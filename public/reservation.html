@@ -18,7 +18,6 @@
             margin: 0 auto;
         }
 
-        /* Crveno primarno dugme */
         .btn-save {
             background-color: #941616;
             border-color: #941616;
@@ -29,6 +28,10 @@
             background-color: #7a1212;
             border-color: #7a1212;
             color: #fff;
+        }
+
+        .btn-action {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -87,23 +90,15 @@
                     <input type="hidden" id="reservation-id">
                     <div class="mb-3">
                         <label for="researcher" class="form-label">Istraživač</label>
-                        <select class="form-select" id="researcher" required></select>
+                        <input type="text" class="form-control" id="researcher" required>
                     </div>
                     <div class="mb-3">
                         <label for="instrument" class="form-label">Instrument</label>
-                        <select class="form-select" id="instrument" required></select>
+                        <input type="text" class="form-control" id="instrument" required>
                     </div>
                     <div class="mb-3">
-                        <label for="start-time" class="form-label">Početak rezervacije</label>
-                        <input type="datetime-local" class="form-control" id="start-time" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="end-time" class="form-label">Kraj rezervacije</label>
-                        <input type="datetime-local" class="form-control" id="end-time" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="parameter" class="form-label">Parametar eksperimenta</label>
-                        <input type="text" class="form-control" id="parameter">
+                        <label for="date" class="form-label">Datum</label>
+                        <input type="date" class="form-control" id="date" required>
                     </div>
                     <button type="submit" class="btn btn-save">Sačuvaj</button>
                     <button type="button" class="btn btn-secondary" id="cancel-btn">Otkaži</button>
@@ -119,9 +114,9 @@
                     <th>ID</th>
                     <th>Istraživač</th>
                     <th>Instrument</th>
-                    <th>Početak</th>
-                    <th>Kraj</th>
-                    <th>Parametar</th>
+                    <th>Datum</th>
+                    <th>Datum kreiranja</th>
+                    <th>Datum izmene</th>
                     <th>Akcije</th>
                 </tr>
             </thead>
