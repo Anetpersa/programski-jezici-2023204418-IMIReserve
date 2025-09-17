@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervacije - IMIReserve</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Crveno primarno dugme */
+        .btn-save {
+            background-color: #941616;
+            border-color: #941616;
+            color: #fff;
+        }
+
+        .btn-save:hover {
+            background-color: #7a1212;
+            border-color: #7a1212;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body data-bs-theme="dark">
+    <div class="main-container">
+
+        <!-- NAVIGACIJA -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
+            <div class="container-lg">
+                <a class="navbar-brand ms-3" href="/index.html">
+                    <i class="fa-solid fa-flask"></i> IMIReserve
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/index.html">
+                                <i class="fa-solid fa-house"></i> Početna
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/researcher.html">
+                                <i class="fa-solid fa-user"></i> Istraživači
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/instrument.html">
+                                <i class="fa-solid fa-microscope"></i> Instrumenti
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/reservation.html">
+                                <i class="fa-solid fa-calendar-days"></i> Rezervacije
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Slika ispod navigacije -->
+        <div class="container mb-4 text-center">
+            <img src="images/bloodstream.jpg" alt="bloodstream" class="img-fluid rounded">
+        </div>
+
+        <!-- FORMA ZA DODAVANJE / IZMENU REZERVACIJE -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Dodaj / Izmeni rezervaciju</h5>
+                <form id="reservation-form">
+                    <input type="hidden" id="reservation-id">
+                    <div class="mb-3">
+                        <label for="researcher" class="form-label">Istraživač</label>
+                        <select class="form-select" id="researcher" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="instrument" class="form-label">Instrument</label>
+                        <select class="form-select" id="instrument" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start-time" class="form-label">Početak rezervacije</label>
+                        <input type="datetime-local" class="form-control" id="start-time" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end-time" class="form-label">Kraj rezervacije</label>
+                        <input type="datetime-local" class="form-control" id="end-time" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="parameter" class="form-label">Parametar eksperimenta</label>
+                        <input type="text" class="form-control" id="parameter">
+                    </div>
+                    <button type="submit" class="btn btn-save">Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-btn">Otkaži</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- TABELA REZERVACIJA -->
+        <h3>Rezervacije</h3>
+        <table class="table table-dark table-striped" id="reservation-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Istraživač</th>
+                    <th>Instrument</th>
+                    <th>Početak</th>
+                    <th>Kraj</th>
+                    <th>Parametar</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/global.js"></script>
+    <script src="/js/reservation.js"></script>
+</body>
+
+</html>
