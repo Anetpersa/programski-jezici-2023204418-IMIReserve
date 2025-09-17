@@ -10,8 +10,7 @@ let researchers = [];
 let instruments = [];
 let editingId = null;
 
-// --- UČITAJ PODATKE ---
-
+// Fetch researchers
 function loadResearchers() {
     axios.get('/api/researcher')
         .then(rsp => {
@@ -26,6 +25,7 @@ function loadResearchers() {
         });
 }
 
+// Fetch instruments
 function loadInstruments() {
     axios.get('/api/instrument')
         .then(rsp => {
@@ -40,6 +40,7 @@ function loadInstruments() {
         });
 }
 
+// Fetch reservations and show in the table
 function loadReservations() {
     axios.get('/api/reservation')
         .then(rsp => {
@@ -61,19 +62,19 @@ function loadReservations() {
                     </td>
                 `;
 
-                // Edit dugme
+                // Edit button
                 tr.querySelector('.edit-btn').addEventListener('click', () => {
                     editingId = r.id;
                     document.getElementById('reservation-id').value = r.id;
                     researcherSelect.value = r.researcherId;
                     instrumentSelect.value = r.instrumentId;
                     document.getElementById('parameter').value = r.parameter;
-                    startTimeInput.value = r.startTime ? r.startTime.substring(0,16) : '';
-                    endTimeInput.value = r.endTime ? r.endTime.substring(0,16) : '';
+                    startTimeInput.value = r.startTime ? r.startTime.substring(0, 16) : '';
+                    endTimeInput.value = r.endTime ? r.endTime.substring(0, 16) : '';
                     if (startTimeInput.value) endTimeInput.min = startTimeInput.value;
                 });
 
-                // Delete dugme
+                // Delete button
                 tr.querySelector('.delete-btn').addEventListener('click', () => {
                     if (confirm('Da li ste sigurni da želite da obrišete ovu rezervaciju?')) {
                         axios.delete('/api/reservation/' + r.id)
@@ -86,9 +87,7 @@ function loadReservations() {
         });
 }
 
-// --- VALIDACIJA DATUMA ---
-
-// Kada se startTime menja, update endTime.min
+// Date validation
 startTimeInput.addEventListener('change', () => {
     if (startTimeInput.value) {
         endTimeInput.min = startTimeInput.value;
@@ -100,7 +99,6 @@ startTimeInput.addEventListener('change', () => {
     }
 });
 
-// Kada se endTime menja, proveri da li je ispravno
 endTimeInput.addEventListener('change', () => {
     if (startTimeInput.value && endTimeInput.value < startTimeInput.value) {
         alert('Vreme završetka ne može biti pre vremena početka!');
@@ -108,8 +106,7 @@ endTimeInput.addEventListener('change', () => {
     }
 });
 
-// --- SUBMIT FORME ---
-
+// Add/edit a reservation
 reservationForm.addEventListener('submit', e => {
     e.preventDefault();
 
@@ -146,15 +143,12 @@ reservationForm.addEventListener('submit', e => {
     }
 });
 
-// --- CANCEL ---
-
+// Cancel button
 cancelBtn.addEventListener('click', () => {
     editingId = null;
     reservationForm.reset();
     endTimeInput.min = '';
 });
-
-// --- INIT ---
 
 loadResearchers();
 loadInstruments();

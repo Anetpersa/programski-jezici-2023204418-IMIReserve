@@ -1,5 +1,3 @@
-// researcher.js
-
 const researcherForm = document.getElementById('researcher-form');
 const researcherTableBody = document.querySelector('#researcher-table tbody');
 const cancelBtn = document.getElementById('cancel-btn');
@@ -9,7 +7,7 @@ if (!researcherForm || !researcherTableBody) {
 } else {
     let editingId = null;
 
-    // Učitaj istraživače i prikaži u tabeli
+    // Fetch researchers and show in the table
     function loadResearchers() {
         axios.get('/api/researcher')
             .then(rsp => {
@@ -30,7 +28,7 @@ if (!researcherForm || !researcherTableBody) {
                         </td>
                     `;
 
-                    // Edit dugme
+                    // Edit button
                     const editBtn = tr.querySelector('.edit-btn');
                     if (editBtn) {
                         editBtn.addEventListener('click', () => {
@@ -43,7 +41,7 @@ if (!researcherForm || !researcherTableBody) {
                         });
                     }
 
-                    // Delete dugme
+                    // Delete button
                     const deleteBtn = tr.querySelector('.delete-btn');
                     if (deleteBtn) {
                         deleteBtn.addEventListener('click', () => {
@@ -61,7 +59,7 @@ if (!researcherForm || !researcherTableBody) {
             .catch(err => showError(err?.response?.data?.message || err.message));
     }
 
-    // Submit forma (dodaj / izmeni istraživača)
+    // Add/edit a researcher
     researcherForm.addEventListener('submit', e => {
         e.preventDefault();
 
@@ -90,7 +88,7 @@ if (!researcherForm || !researcherTableBody) {
         }
     });
 
-    // Cancel dugme
+    // Cancel button
     if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
             editingId = null;
@@ -98,6 +96,5 @@ if (!researcherForm || !researcherTableBody) {
         });
     }
 
-    // INIT
     loadResearchers();
 }

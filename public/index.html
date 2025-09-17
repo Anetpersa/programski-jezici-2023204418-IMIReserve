@@ -15,6 +15,8 @@
 
 <body data-bs-theme="dark">
     <div class="main-container">
+
+        <!-- header -->
         <header>
             <div>
                 <h2>Institut za medicinska istraživanja</h2>
@@ -23,7 +25,7 @@
             <img src="images/imilogo_resized.jpg" alt="logo" id="logo">
         </header>
 
-        <!-- NAVIGACIJA -->
+        <!-- navigation -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
             <div class="container-lg">
                 <a class="navbar-brand ms-3" href="/index.html">
@@ -61,16 +63,14 @@
             </div>
         </nav>
 
-        <!-- Slika ispod navigacije -->
-        <!-- Slika ispod navigacije -->
+        <!-- image -->
         <div class="text-center mb-2">
             <img src="images/bloodstream.jpg" alt="bloodstream" class="img-fluid rounded">
         </div>
 
-        <!-- SADRŽAJ -->
         <div id="content"></div>
 
-        <!-- TEMPLATE KARTICA -->
+        <!-- card template -->
         <template id="template">
             <div class="card">
                 <div class="card-body">
@@ -85,6 +85,7 @@
             </div>
         </template>
 
+        <!-- footer -->
         <footer>
             <p>Institut za medicinska istraživanja Univerzitet u Beograd</p>
         </footer>
@@ -100,7 +101,7 @@
         const content = document.getElementById('content');
         const template = document.getElementById('template');
 
-        // Prikaz početnih kartica
+        // cards display
         const cards = [
             {
                 title: "Istraživači",

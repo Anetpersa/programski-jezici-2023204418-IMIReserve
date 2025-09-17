@@ -1,3 +1,4 @@
+/* global stylisation */
 .main-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -53,9 +54,7 @@ footer p {
     text-align: center;
 }
 
-/* ============================ */
-/*            KARTICE           */
-/* ============================ */
+/* cards */
 .card {
     flex: 1 1 32%;
     max-width: 32%;
@@ -70,9 +69,7 @@ footer p {
     text-decoration: none;
 }
 
-/* ============================ */
-/*  FORME KOJE ZAUZIMAJU CELU ŠIRINU */
-/* ============================ */
+/* forms */
 .full-width-card {
     width: 100% !important;
     max-width: 100% !important;
@@ -83,7 +80,7 @@ footer p {
 
 .full-width-card .card-body {
     width: 100%;
-    padding: 15px; /* razmak iznad i ispod forme, kao i sa strane */
+    padding: 15px;
     box-sizing: border-box;
 }
 
@@ -99,12 +96,10 @@ footer p {
 }
 
 .full-width-card .mb-3 {
-    margin-bottom: 1rem; /* razmak između labela i inputa */
+    margin-bottom: 1rem;
 }
 
-/* ============================ */
-/*          DUGMIĆI             */
-/* ============================ */
+/* buttons */
 .btn-save,
 .btn-open {
     background-color: #941616;
@@ -123,9 +118,7 @@ footer p {
     margin-right: 5px;
 }
 
-/* ============================ */
-/*            TABELA            */
-/* ============================ */
+/* tabels */
 #instrument-table,
 #reservation-table,
 #researcher-table {

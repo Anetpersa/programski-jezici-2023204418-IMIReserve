@@ -1,5 +1,3 @@
-// instrument.js
-
 const instrumentForm = document.getElementById('instrument-form');
 const instrumentTableBody = document.querySelector('#instrument-table tbody');
 const cancelBtn = document.getElementById('cancel-btn');
@@ -9,7 +7,7 @@ if (!instrumentForm || !instrumentTableBody) {
 } else {
     let editingId = null;
 
-    // Učitaj instrumente i prikaži u tabeli
+    // Fetch instruments and show in the table
     function loadInstruments() {
         axios.get('/api/instrument')
             .then(rsp => {
@@ -28,7 +26,7 @@ if (!instrumentForm || !instrumentTableBody) {
                         </td>
                     `;
 
-                    // Edit dugme
+                    // Edit button
                     const editBtn = tr.querySelector('.edit-btn');
                     if (editBtn) {
                         editBtn.addEventListener('click', () => {
@@ -39,7 +37,7 @@ if (!instrumentForm || !instrumentTableBody) {
                         });
                     }
 
-                    // Delete dugme
+                    // Delete button
                     const deleteBtn = tr.querySelector('.delete-btn');
                     if (deleteBtn) {
                         deleteBtn.addEventListener('click', () => {
@@ -57,7 +55,7 @@ if (!instrumentForm || !instrumentTableBody) {
             .catch(err => showError(err?.response?.data?.message || err.message));
     }
 
-    // Submit forma (dodaj / izmeni instrument)
+    // Add/edit an instrument
     instrumentForm.addEventListener('submit', e => {
         e.preventDefault();
 
@@ -84,7 +82,7 @@ if (!instrumentForm || !instrumentTableBody) {
         }
     });
 
-    // Cancel dugme
+    // Cancel button
     if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
             editingId = null;
@@ -92,6 +90,5 @@ if (!instrumentForm || !instrumentTableBody) {
         });
     }
 
-    // INIT
     loadInstruments();
 }
