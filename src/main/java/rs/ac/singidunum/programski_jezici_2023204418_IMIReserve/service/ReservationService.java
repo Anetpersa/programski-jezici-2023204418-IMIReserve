@@ -13,10 +13,10 @@ import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.repository.Reser
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,26 +29,44 @@ public class ReservationService {
     private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public List<ReservationResponseDTO> getReservations() {
-        return reservationRepository.findAllByDeletedAtIsNull()
-                .stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+        List<Reservation> reservations = reservationRepository.findAllByDeletedAtIsNull();
+        List<ReservationResponseDTO> dtos = new ArrayList<ReservationResponseDTO>();
+        for (Reservation r : reservations) {
+            dtos.add(toDTO(r));
+        }
+        return dtos;
     }
 
     public Optional<ReservationResponseDTO> getReservationById(Integer id) {
-        return reservationRepository.findByIdAndDeletedAtIsNull(id)
-                .map(this::toDTO);
+        Optional<Reservation> optionalReservation = reservationRepository.findByIdAndDeletedAtIsNull(id);
+        if (optionalReservation.isPresent()) {
+            return Optional.of(toDTO(optionalReservation.get()));
+        } else {
+            return Optional.empty();
+        }
     }
 
     public ReservationResponseDTO createReservation(ReservationDTO dto) {
-        Researcher researcher = researcherRepository.findByIdAndDeletedAtIsNull(dto.getResearcherId())
-                .orElseThrow(() -> new RuntimeException("RESEARCHER_NOT_FOUND"));
+        Optional<Researcher> optionalResearcher = researcherRepository.findByIdAndDeletedAtIsNull(dto.getResearcherId());
+        if (!optionalResearcher.isPresent()) {
+            throw new RuntimeException("RESEARCHER_NOT_FOUND");
+        }
+        Researcher researcher = optionalResearcher.get();
 
-        Instrument instrument = instrumentRepository.findByIdAndDeletedAtIsNull(dto.getInstrumentId())
-                .orElseThrow(() -> new RuntimeException("INSTRUMENT_NOT_FOUND"));
+        Optional<Instrument> optionalInstrument = instrumentRepository.findByIdAndDeletedAtIsNull(dto.getInstrumentId());
+        if (!optionalInstrument.isPresent()) {
+            throw new RuntimeException("INSTRUMENT_NOT_FOUND");
+        }
+        Instrument instrument = optionalInstrument.get();
 
         Reservation reservation = new Reservation();
-        reservation.setUuid(dto.getUuid() != null ? dto.getUuid() : UUID.randomUUID().toString());
+
+        if (dto.getUuid() != null) {
+            reservation.setUuid(dto.getUuid());
+        } else {
+            reservation.setUuid(UUID.randomUUID().toString());
+        }
+
         reservation.setParameter(dto.getParameter());
         reservation.setStartTime(LocalDateTime.parse(dto.getStartTime(), formatter));
         reservation.setEndTime(LocalDateTime.parse(dto.getEndTime(), formatter));
@@ -60,14 +78,23 @@ public class ReservationService {
     }
 
     public ReservationResponseDTO updateReservation(Integer id, ReservationDTO dto) {
-        Reservation reservation = reservationRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new RuntimeException("RESERVATION_NOT_FOUND"));
+        Optional<Reservation> optionalReservation = reservationRepository.findByIdAndDeletedAtIsNull(id);
+        if (!optionalReservation.isPresent()) {
+            throw new RuntimeException("RESERVATION_NOT_FOUND");
+        }
+        Reservation reservation = optionalReservation.get();
 
-        Researcher researcher = researcherRepository.findByIdAndDeletedAtIsNull(dto.getResearcherId())
-                .orElseThrow(() -> new RuntimeException("RESEARCHER_NOT_FOUND"));
+        Optional<Researcher> optionalResearcher = researcherRepository.findByIdAndDeletedAtIsNull(dto.getResearcherId());
+        if (!optionalResearcher.isPresent()) {
+            throw new RuntimeException("RESEARCHER_NOT_FOUND");
+        }
+        Researcher researcher = optionalResearcher.get();
 
-        Instrument instrument = instrumentRepository.findByIdAndDeletedAtIsNull(dto.getInstrumentId())
-                .orElseThrow(() -> new RuntimeException("INSTRUMENT_NOT_FOUND"));
+        Optional<Instrument> optionalInstrument = instrumentRepository.findByIdAndDeletedAtIsNull(dto.getInstrumentId());
+        if (!optionalInstrument.isPresent()) {
+            throw new RuntimeException("INSTRUMENT_NOT_FOUND");
+        }
+        Instrument instrument = optionalInstrument.get();
 
         reservation.setParameter(dto.getParameter());
         reservation.setStartTime(LocalDateTime.parse(dto.getStartTime(), formatter));
@@ -80,8 +107,11 @@ public class ReservationService {
     }
 
     public void deleteReservation(Integer id) {
-        Reservation reservation = reservationRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new RuntimeException("RESERVATION_NOT_FOUND"));
+        Optional<Reservation> optionalReservation = reservationRepository.findByIdAndDeletedAtIsNull(id);
+        if (!optionalReservation.isPresent()) {
+            throw new RuntimeException("RESERVATION_NOT_FOUND");
+        }
+        Reservation reservation = optionalReservation.get();
         reservation.setDeletedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
     }
@@ -97,8 +127,19 @@ public class ReservationService {
         dto.setStartTime(r.getStartTime().toString());
         dto.setEndTime(r.getEndTime().toString());
         dto.setUuid(r.getUuid());
-        dto.setCreatedAt(r.getCreatedAt() != null ? r.getCreatedAt().toString() : null);
-        dto.setUpdatedAt(r.getUpdatedAt() != null ? r.getUpdatedAt().toString() : null);
+
+        if (r.getCreatedAt() != null) {
+            dto.setCreatedAt(r.getCreatedAt().toString());
+        } else {
+            dto.setCreatedAt(null);
+        }
+
+        if (r.getUpdatedAt() != null) {
+            dto.setUpdatedAt(r.getUpdatedAt().toString());
+        } else {
+            dto.setUpdatedAt(null);
+        }
+
         return dto;
     }
 }

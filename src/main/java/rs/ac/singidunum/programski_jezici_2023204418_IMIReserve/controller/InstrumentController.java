@@ -9,8 +9,9 @@ import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Instrumen
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.service.InstrumentService;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/instrument")
@@ -23,16 +24,24 @@ public class InstrumentController {
 
     @GetMapping
     public List<InstrumentResponseDTO> getInstruments() {
-        return service.getInstruments().stream()
-                .map(this::convertToResponseDTO)
-                .collect(Collectors.toList());
+        List<Instrument> instruments = service.getInstruments();
+        List<InstrumentResponseDTO> dtos = new ArrayList<InstrumentResponseDTO>();
+        for (Instrument i : instruments) {
+            InstrumentResponseDTO dto = convertToResponseDTO(i);
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     @GetMapping("/{id}")
     public InstrumentResponseDTO getInstrumentById(@PathVariable Integer id) {
-        return service.getInstrumentById(id)
-                .map(this::convertToResponseDTO)
-                .orElseThrow(() -> new RuntimeException("INSTRUMENT_NOT_FOUND"));
+        Optional<Instrument> optionalInstrument = service.getInstrumentById(id);
+        if (optionalInstrument.isPresent()) {
+            Instrument instrument = optionalInstrument.get();
+            return convertToResponseDTO(instrument);
+        } else {
+            throw new RuntimeException("INSTRUMENT_NOT_FOUND");
+        }
     }
 
     @PostMapping
@@ -58,8 +67,19 @@ public class InstrumentController {
         dto.setId(i.getId());
         dto.setInstrumentName(i.getInstrumentName());
         dto.setLaboratory(i.getLaboratory());
-        dto.setCreatedAt(i.getCreatedAt() != null ? i.getCreatedAt().format(formatter) : null);
-        dto.setUpdatedAt(i.getUpdatedAt() != null ? i.getUpdatedAt().format(formatter) : null);
+
+        if (i.getCreatedAt() != null) {
+            dto.setCreatedAt(i.getCreatedAt().format(formatter));
+        } else {
+            dto.setCreatedAt(null);
+        }
+
+        if (i.getUpdatedAt() != null) {
+            dto.setUpdatedAt(i.getUpdatedAt().format(formatter));
+        } else {
+            dto.setUpdatedAt(null);
+        }
+
         return dto;
     }
 }

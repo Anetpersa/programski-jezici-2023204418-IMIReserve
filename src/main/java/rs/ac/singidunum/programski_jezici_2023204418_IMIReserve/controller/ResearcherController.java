@@ -9,8 +9,9 @@ import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.entity.Researche
 import rs.ac.singidunum.programski_jezici_2023204418_IMIReserve.service.ResearcherService;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/researcher")
@@ -23,16 +24,24 @@ public class ResearcherController {
 
     @GetMapping
     public List<ResearcherResponseDTO> getResearchers() {
-        return service.getResearchers().stream()
-                .map(this::convertToResponseDTO)
-                .collect(Collectors.toList());
+        List<Researcher> researchers = service.getResearchers();
+        List<ResearcherResponseDTO> dtos = new ArrayList<ResearcherResponseDTO>();
+        for (Researcher r : researchers) {
+            ResearcherResponseDTO dto = convertToResponseDTO(r);
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     @GetMapping("/{id}")
     public ResearcherResponseDTO getResearcherById(@PathVariable Integer id) {
-        return service.getResearcherById(id)
-                .map(this::convertToResponseDTO)
-                .orElseThrow(() -> new RuntimeException("RESEARCHER_NOT_FOUND"));
+        Optional<Researcher> optionalResearcher = service.getResearcherById(id);
+        if (optionalResearcher.isPresent()) {
+            Researcher researcher = optionalResearcher.get();
+            return convertToResponseDTO(researcher);
+        } else {
+            throw new RuntimeException("RESEARCHER_NOT_FOUND");
+        }
     }
 
     @PostMapping
@@ -60,8 +69,19 @@ public class ResearcherController {
         dto.setLastName(r.getLastName());
         dto.setPhone(r.getPhone());
         dto.setEmail(r.getEmail());
-        dto.setCreatedAt(r.getCreatedAt() != null ? r.getCreatedAt().format(formatter) : null);
-        dto.setUpdatedAt(r.getUpdatedAt() != null ? r.getUpdatedAt().format(formatter) : null);
+
+        if (r.getCreatedAt() != null) {
+            dto.setCreatedAt(r.getCreatedAt().format(formatter));
+        } else {
+            dto.setCreatedAt(null);
+        }
+
+        if (r.getUpdatedAt() != null) {
+            dto.setUpdatedAt(r.getUpdatedAt().format(formatter));
+        } else {
+            dto.setUpdatedAt(null);
+        }
+
         return dto;
     }
 }

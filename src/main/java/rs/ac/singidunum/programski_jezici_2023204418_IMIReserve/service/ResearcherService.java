@@ -35,21 +35,30 @@ public class ResearcherService {
     }
 
     public Researcher updateResearcher(Integer id, ResearcherDTO dto) {
-        Researcher researcher = repository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new RuntimeException("RESEARCHER_NOT_FOUND"));
+        Optional<Researcher> optionalResearcher = repository.findByIdAndDeletedAtIsNull(id);
 
-        researcher.setFirstName(dto.getFirstName());
-        researcher.setLastName(dto.getLastName());
-        researcher.setPhone(dto.getPhone());
-        researcher.setEmail(dto.getEmail());
-        researcher.setUpdatedAt(LocalDateTime.now());
-        return repository.save(researcher);
+        if (optionalResearcher.isPresent()) {
+            Researcher researcher = optionalResearcher.get();
+            researcher.setFirstName(dto.getFirstName());
+            researcher.setLastName(dto.getLastName());
+            researcher.setPhone(dto.getPhone());
+            researcher.setEmail(dto.getEmail());
+            researcher.setUpdatedAt(LocalDateTime.now());
+            return repository.save(researcher);
+        } else {
+            throw new RuntimeException("RESEARCHER_NOT_FOUND");
+        }
     }
 
     public void deleteResearcher(Integer id) {
-        Researcher researcher = repository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new RuntimeException("RESEARCHER_NOT_FOUND"));
-        researcher.setDeletedAt(LocalDateTime.now());
-        repository.save(researcher);
+        Optional<Researcher> optionalResearcher = repository.findByIdAndDeletedAtIsNull(id);
+
+        if (optionalResearcher.isPresent()) {
+            Researcher researcher = optionalResearcher.get();
+            researcher.setDeletedAt(LocalDateTime.now());
+            repository.save(researcher);
+        } else {
+            throw new RuntimeException("RESEARCHER_NOT_FOUND");
+        }
     }
 }
